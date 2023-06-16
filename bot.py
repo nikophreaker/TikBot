@@ -74,7 +74,7 @@ sheet_name = 'MARSHA'
 
 # Specify the columns and rows you want to extract
 columns = ['Gmail', 'Password.2']  # Replace with your desired column names
-start_row = 1  # Replace with the starting row index
+start_row = 25  # Replace with the starting row index
 end_row = 51  # Replace with the ending row index
 
 # Read the Excel file into a DataFrame

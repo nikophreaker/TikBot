@@ -5,3 +5,4 @@ PIL
 pandas
 pynput
 selenium_stealth
+fake_useragent
