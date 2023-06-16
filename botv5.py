@@ -121,6 +121,9 @@ def login_tiktok(accounts, proxies, target_url, comments):
 
 def main():
 
+    #multi-instance
+    workers = 5
+
     # Specify the file path of the Excel file
     excel_file = 'AKUN GMAIL.xlsx'
 
@@ -188,10 +191,7 @@ def main():
         split_arrays.append(accounts[start:end])
         start = end
 
-    # for arr in split_arrays:
-    #     print(arr)
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
         futures = []
         for account in split_arrays:
             futures.append(
