@@ -1,0 +1,7 @@
+undetected_chromedriver
+selenium
+numpy
+PIL
+pandas
+pynput
+selenium_stealth

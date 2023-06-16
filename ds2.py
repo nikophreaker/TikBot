@@ -9,6 +9,7 @@ def detect_similar_objects(image_path, threshold_area=500, threshold_similarity=
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Apply adaptive thresholding to create a binary image
+    # _, binary = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
     _, binary = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY_INV)
 
     # Find contours in the binary image
@@ -40,7 +41,7 @@ def detect_similar_objects(image_path, threshold_area=500, threshold_similarity=
 
     return shape_arrays
 
-def check_similarity(shape_arrays, threshold_similarity=0.25):
+def check_similarity(shape_arrays, threshold_similarity=0.55):
     similar_shapes = []
     for i in range(len(shape_arrays)):
         similar_indices = [i]
@@ -56,7 +57,7 @@ def compare_shapes(shape1, shape2, threshold_similarity=0.25):
     return similarity < threshold_similarity
 
 # Set the path to your image
-image_path = 'puzzle1.png'
+image_path = 'output.jpg'
 
 # Detect similar objects based on shape and get the contour arrays
 contour_arrays = detect_similar_objects(image_path)
