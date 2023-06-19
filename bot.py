@@ -29,6 +29,9 @@ excel_file = 'AKUN GMAIL.xlsx'
 options = webdriver.ChromeOptions()
 options.add_argument("start-maximized")
 
+# Add the --mute-audio flag
+options.add_argument("--mute-audio")
+
 # options.add_argument("--headless")
 
 # Set the proxy IP address and port

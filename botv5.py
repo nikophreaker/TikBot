@@ -34,6 +34,10 @@ def login_tiktok(accounts, proxies, target_url, comments):
         options = webdriver.ChromeOptions()
         options.add_argument("start-maximized")
         options.add_argument(f'--user-agent={user_agent}')
+
+        # Add the --mute-audio flag
+        options.add_argument("--mute-audio")
+        
         # options.add_argument(f'--proxy-server={proxy}')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -91,22 +95,30 @@ def login_tiktok(accounts, proxies, target_url, comments):
             # Add likes to the post
             wait = WebDriverWait(driver, 10)
             like_button = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[1]/div[4]/div/button[1]')))
-            like_button.click()
-            time.sleep(5)
+            tag_element = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[3]/div[2]/div/div[2]/div[1]/div[1]/div[1]/div[4]/div/button[1]/span/div/div/svg/g/g[2]/g/g[4]')))
+            
+            # Get the value of the 'style' attribute
+            style_value = tag_element.get_attribute("style")
 
-            # Add comment to the post
-            # Create an instance of ActionChains
-            # Move to the element to make it visible
-            comment_click = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[1]/div/div/div[1]/div')
-            actions = ActionChains(driver)
-            actions.move_to_element(comment_click)
-            actions.perform()
-            comment_click.click()
-            comment_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[1]/div/div/div[1]/div/div[1]/div/div/div[2]/div/div/div/div/span')))
-            comment_input.send_keys(comment)
-            time.sleep(2)
-            comment_input.send_keys(Keys.ENTER)
-            time.sleep(2)
+            # Perform a conditional action based on the style value
+            if "display: none;" in style_value:
+                # Do something if the style value contains 'display: none;'
+                like_button.click()
+                time.sleep(5)
+
+                # Add comment to the post
+                # Create an instance of ActionChains
+                # Move to the element to make it visible
+                comment_click = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[1]/div/div/div[1]/div')
+                actions = ActionChains(driver)
+                actions.move_to_element(comment_click)
+                actions.perform()
+                comment_click.click()
+                comment_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[1]/div/div/div[1]/div/div[1]/div/div/div[2]/div/div/div/div/span')))
+                comment_input.send_keys(comment)
+                time.sleep(2)
+                comment_input.send_keys(Keys.ENTER)
+                time.sleep(2)
 
             # Logout and clear cookies for the next account
             driver.delete_all_cookies()
