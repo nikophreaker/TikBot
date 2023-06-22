@@ -39,38 +39,9 @@ options.add_argument("start-maximized")
 # Add the --mute-audio flag
 options.add_argument("--mute-audio")
 
-options.add_argument(f'--proxy-server={random.choice(proxies)}')
+# options.add_argument(f'--proxy-server={random.choice(proxies)}')
 
 # options.add_argument("--headless")
-
-# Set the proxy IP address and port
-# proxy_ip = '199.102.105.242'
-# proxy_port = '4145'
-
-# Configure the Selenium WebDriver to use the proxy server
-# proxy_options = {
-#     'proxy': {
-#         'proxyType': 'MANUAL',
-#         'httpProxy': f'{proxy_ip}:{proxy_port}',
-#         'sslProxy': f'{proxy_ip}:{proxy_port}'
-#     }
-# }
-
-# options.add_argument('user_agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36')
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
-driver = webdriver.Chrome(options=options)
-
-stealth(driver,
-        languages=["en-US", "en"],
-        user_agent= 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-        # proxy_options=proxy_options
-        )
 
 # URL to navigate to after logging in
 target_url = "https://www.tiktok.com/@nikxphreaker/video/6993669592551836930"
@@ -120,6 +91,35 @@ with open(comments_file, "r") as file:
 for account in accounts:
     
     try:
+        # Set the proxy IP address and port
+        proxy = random.choice(proxies).split(":")
+        proxy_ip = proxy[0] #'199.102.105.242'
+        proxy_port = proxy[1] #'4145'
+
+        # Configure the Selenium WebDriver to use the proxy server
+        proxy_options = {
+            'proxy': {
+                'proxyType': 'MANUAL',
+                'httpProxy': f'{proxy_ip}:{proxy_port}',
+                'sslProxy': f'{proxy_ip}:{proxy_port}'
+            }
+        }
+
+        # options.add_argument('user_agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36')
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
+        driver = webdriver.Chrome(options=options)
+
+        stealth(driver,
+                languages=["en-US", "en"],
+                user_agent= 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                proxy_options=proxy_options
+                )
         print(f'Account {account["username"]} is logging in...')
 
         # Open TikTok website
