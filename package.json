@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "puppeteer": "^20.7.2",
+    "random-useragent": "^0.5.0",
+    "selenium-webdriver": "^4.10.0",
+    "tiktok-captcha-solver": "^0.0.9",
+    "user-agents": "^1.0.1415",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "selenium-manager": "^0.4.3"
+  }
+}

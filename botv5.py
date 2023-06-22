@@ -33,31 +33,44 @@ def login_tiktok(accounts, proxies, target_url, comments):
         # Set up Chrome options
         options = webdriver.ChromeOptions()
         options.add_argument("start-maximized")
-        options.add_argument(f'--user-agent={user_agent}')
+        # options.add_argument(f'--user-agent={user_agent}')
 
         # Add the --mute-audio flag
         options.add_argument("--mute-audio")
-        
+
         # options.add_argument(f'--proxy-server={proxy}')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
+        
+        # Set the proxy IP address and port
+        proxy_ip = '199.102.105.242'
+        proxy_port = '4145'
+
+        # Configure the Selenium WebDriver to use the proxy server
+        proxy_options = {
+            'proxy': {
+                'proxyType': 'MANUAL',
+                'httpProxy': f'{proxy_ip}:{proxy_port}',
+                'sslProxy': f'{proxy_ip}:{proxy_port}'
+            }
+        }
+        # options.add_argument('--no-sandbox')
+        # options.add_argument('--disable-dev-shm-usage')
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
         webdriver_path = 'chromedriver.exe'
 
-        # stealth(driver,
-        #         languages=["en-US", "en"],
-        #         user_agent= 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
-        #         vendor="Google Inc.",
-        #         platform="Win32",
-        #         webgl_vendor="Intel Inc.",
-        #         renderer="Intel Iris OpenGL Engine",
-        #         fix_hairline=True,
-        #         )
-
-        print(f"Account {username} is Login.")
         # driver = webdriver.Chrome(executable_path=webdriver_path, options=options)
         driver = webdriver.Chrome(options=options)
+
+        stealth(driver,
+                languages=["en-US", "en"],
+                user_agent= 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36',
+                vendor="Google Inc.",
+                platform="Win32",
+                webgl_vendor="Intel Inc.",
+                renderer="Intel Iris OpenGL Engine",
+                fix_hairline=True,
+                proxy_options=proxy_options
+                )
 
         try:
             print(f"Account {username} is Login.")
@@ -77,14 +90,17 @@ def login_tiktok(accounts, proxies, target_url, comments):
             # Press Enter to submit the login form
             password_field.send_keys(Keys.ENTER)
 
-            WebDriverWait(driver, 10).until(EC.url_to_be('https://www.tiktok.com'))
+            WebDriverWait(driver, 15).until(EC.url_to_be('https://www.tiktok.com/foryou?lang=en'))
+            
+            # Navigate to the target URL
+            driver.get(target_url)
 
-            # Example: Check if login was successful
-            if "login" in driver.current_url:
-                raise Exception("Login failed")
-            else:
-                # Navigate to the target URL
-                driver.get(target_url)
+            # # Example: Check if login was successful
+            # if "login" in driver.current_url:
+            #     raise Exception("Login failed")
+            # else:
+            #     # Navigate to the target URL
+            #     driver.get(target_url)
 
             # Add the account to the set of logged-in accounts
             logged_in_accounts.add(username)
@@ -95,10 +111,30 @@ def login_tiktok(accounts, proxies, target_url, comments):
             # Add likes to the post
             wait = WebDriverWait(driver, 10)
             like_button = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[1]/div[4]/div/button[1]')))
-            tag_element = wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[3]/div[2]/div/div[2]/div[1]/div[1]/div[1]/div[4]/div/button[1]/span/div/div/svg/g/g[2]/g/g[4]')))
-            
-            # Get the value of the 'style' attribute
+            # print(like_button)
+            wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[1]/div[4]/div/button[1]/span/div/div/svg/g/g[1]/g/g[1]')))
+            tag_element = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[1]/div[1]/div[4]/div/button[1]/span/div/div/svg/g/g[1]/g/g[1]')
+            # print(tag_element)
+            # # Get the value of the 'style' attribute
             style_value = tag_element.get_attribute("style")
+            print(style_value)
+
+            # # Do something if the style value contains 'display: none;'
+            # like_button.click()
+            # time.sleep(5)
+            # # Add comment to the post
+            # # Create an instance of ActionChains
+            # # Move to the element to make it visible
+            # comment_click = driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[1]/div/div/div[1]/div')
+            # actions = ActionChains(driver)
+            # actions.move_to_element(comment_click)
+            # actions.perform()
+            # comment_click.click()
+            # comment_input = wait.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[1]/div/div/div[1]/div/div[1]/div/div/div[2]/div/div/div/div/span')))
+            # comment_input.send_keys(comment)
+            # time.sleep(2)
+            # comment_input.send_keys(Keys.ENTER)
+            # time.sleep(2)
 
             # Perform a conditional action based on the style value
             if "display: none;" in style_value:
@@ -129,12 +165,13 @@ def login_tiktok(accounts, proxies, target_url, comments):
             print(f"Error during login: {str(e)}")
 
         finally:
+            # print("wait login:")
             driver.quit()
 
 def main():
 
     #multi-instance
-    workers = 5
+    workers = 2
 
     # Specify the file path of the Excel file
     excel_file = 'AKUN GMAIL.xlsx'
@@ -155,8 +192,8 @@ def main():
 
     # Specify the columns and rows you want to extract
     columns = ['Gmail', 'Password.2']  # Replace with your desired column names
-    start_row = 25  # Replace with the starting row index
-    end_row = 51  # Replace with the ending row index
+    start_row = 78  # Replace with the starting row index
+    end_row = 79  # Replace with the ending row index
 
     # Read the Excel file into a DataFrame
     df = pd.read_excel(excel_file, sheet_name=sheet_name)
@@ -176,7 +213,7 @@ def main():
         if item[columns[0]] == str('nan') or item[columns[1]] == str('nan') :
             continue
         account = {"username": item[columns[0]], "password": item[columns[1]]}
-        accounts.append(account)   
+        accounts.append(account)
 
     # Read Proxies texts from the text file
     proxies = []
