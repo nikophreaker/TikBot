@@ -20,6 +20,13 @@ credentials_file = "credentials.txt"
 # Specify the file path of the Excel file
 excel_file = 'AKUN GMAIL.xlsx'
 
+proxy_file_path = 'proxy.txt'
+
+# Read Proxies texts from the text file
+proxies = []
+with open(proxy_file_path, 'r') as file:
+    for line in file:
+        proxies.append(line.strip())
 # Instantiate the Chrome WebDriver
 # driver = webdriver.Chrome()
 # Add any desired options to the options object, if needed
@@ -32,20 +39,22 @@ options.add_argument("start-maximized")
 # Add the --mute-audio flag
 options.add_argument("--mute-audio")
 
+options.add_argument(f'--proxy-server={random.choice(proxies)}')
+
 # options.add_argument("--headless")
 
 # Set the proxy IP address and port
-proxy_ip = '199.102.105.242'
-proxy_port = '4145'
+# proxy_ip = '199.102.105.242'
+# proxy_port = '4145'
 
 # Configure the Selenium WebDriver to use the proxy server
-proxy_options = {
-    'proxy': {
-        'proxyType': 'MANUAL',
-        'httpProxy': f'{proxy_ip}:{proxy_port}',
-        'sslProxy': f'{proxy_ip}:{proxy_port}'
-    }
-}
+# proxy_options = {
+#     'proxy': {
+#         'proxyType': 'MANUAL',
+#         'httpProxy': f'{proxy_ip}:{proxy_port}',
+#         'sslProxy': f'{proxy_ip}:{proxy_port}'
+#     }
+# }
 
 # options.add_argument('user_agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.53 Safari/537.36')
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -60,7 +69,7 @@ stealth(driver,
         webgl_vendor="Intel Inc.",
         renderer="Intel Iris OpenGL Engine",
         fix_hairline=True,
-        proxy_options=proxy_options
+        # proxy_options=proxy_options
         )
 
 # URL to navigate to after logging in
