@@ -38,20 +38,20 @@ def login_tiktok(accounts, proxies, target_url, comments):
         # Add the --mute-audio flag
         options.add_argument("--mute-audio")
 
-        # options.add_argument(f'--proxy-server={proxy}')
+        options.add_argument(f'--proxy-server={proxy}')
         
-        # Set the proxy IP address and port
-        proxy_ip = '199.102.105.242'
-        proxy_port = '4145'
+        # # Set the proxy IP address and port
+        # proxy_ip = '199.102.105.242'
+        # proxy_port = '4145'
 
         # Configure the Selenium WebDriver to use the proxy server
-        proxy_options = {
-            'proxy': {
-                'proxyType': 'MANUAL',
-                'httpProxy': f'{proxy_ip}:{proxy_port}',
-                'sslProxy': f'{proxy_ip}:{proxy_port}'
-            }
-        }
+        # proxy_options = {
+        #     'proxy': {
+        #         'proxyType': 'MANUAL',
+        #         'httpProxy': f'{proxy_ip}:{proxy_port}',
+        #         'sslProxy': f'{proxy_ip}:{proxy_port}'
+        #     }
+        # }
         # options.add_argument('--no-sandbox')
         # options.add_argument('--disable-dev-shm-usage')
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
