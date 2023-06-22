@@ -69,7 +69,7 @@ def login_tiktok(accounts, proxies, target_url, comments):
                 webgl_vendor="Intel Inc.",
                 renderer="Intel Iris OpenGL Engine",
                 fix_hairline=True,
-                proxy_options=proxy_options
+                # proxy_options=proxy_options
                 )
 
         try:
